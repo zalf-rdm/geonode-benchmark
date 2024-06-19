@@ -1,0 +1,11 @@
+apiVersion: v2
+name: geonode-benchmark
+description: A helmchart to deployment several geonode instances with different resource definitions to run benchmarking on
+version: 1.0.0
+type: application
+appVersion: "4.3.0"
+
+dependencies:
+  - name: geonode-k8s
+    version: 1.2.0
+    repository: https://zalf-rdm.github.io/geonode-k8s/
