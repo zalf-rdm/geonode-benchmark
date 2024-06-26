@@ -6,7 +6,7 @@
 
 geonode-k8s:
   global:
-    storageClass: ???
+    storageClass: ${GN_BENCHMARK_STORAGE_CLASS}
 
   geonode:
     replicaCount: 1
@@ -15,15 +15,15 @@ geonode-k8s:
 
     general:
       externalScheme: https
-      externalDomain: ???
+      externalDomain: ${GN_BENCHMARK_EXTERNAL_DOMAIN}
 
     ingress:
       enabled: true
-      ingressClassName: ???
+      ingressClassName: ${GN_BENCHMARK_INGRESS_CLASS}
       annotations:
         nginx.ingress.kubernetes.io/proxy-body-size: 2048m
       addNginxIngressAnnotation: true
-      tlsSecret: geonode-tls-secret
+      tlsSecret: ${GN_BENCHMARK_TLS_SECRET_NAME}
 
     resources:
       requests:
@@ -78,10 +78,10 @@ geonode-k8s:
         cpu: 0.1
 
   rabbitmq:
-    clusterDomain: ??? # "draven.cluster"
+    clusterDomain: ${GN_BENCHMARK_CLUSTER_DOMAIN}
     persistence:
       enabled: true
-      storageclass: ???
+      storageclass: ${GN_BENCHMARK_STORAGE_CLASS}
       size: 3Gi
     resources:
       requests:

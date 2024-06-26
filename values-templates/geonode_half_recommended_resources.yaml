@@ -17,13 +17,18 @@ geonode-k8s:
       externalScheme: https
       externalDomain: ${GN_BENCHMARK_EXTERNAL_DOMAIN}
 
+    register:
+      open_signup: True
+      email_verification: "False"
+      authentication_method: username_email
+
     ingress:
       enabled: true
       ingressClassName: ${GN_BENCHMARK_INGRESS_CLASS}
       annotations:
         nginx.ingress.kubernetes.io/proxy-body-size: 2048m
       addNginxIngressAnnotation: true
-      tlsSecret: geonode-tls-secret
+      tlsSecret: ${GN_BENCHMARK_TLS_SECRET_NAME}
 
     resources:
       requests:
@@ -65,7 +70,7 @@ geonode-k8s:
         cpu: 0.3
 
   postgres-operator:
-    enabled: true
+    enabled: false
 
   pycsw:
     enabled: True
@@ -78,11 +83,16 @@ geonode-k8s:
         cpu: 0.1
 
   rabbitmq:
+    image:
+      tag: 3.10.7-debian-11-r18
     clusterDomain: ${GN_BENCHMARK_CLUSTER_DOMAIN}
     persistence:
       enabled: true
       storageclass: ${GN_BENCHMARK_STORAGE_CLASS}
       size: 3Gi
+    auth:
+      password: rabbit_password
+      erkangCookie: Eew5w3rsdfdsdf
     resources:
       requests:
         memory: "128Mi"

@@ -6,7 +6,7 @@
 
 geonode-k8s:
   global:
-    storageClass: ???
+    storageClass: ${GN_BENCHMARK_STORAGE_CLASS}
 
   geonode:
     replicaCount: 1
@@ -15,15 +15,15 @@ geonode-k8s:
 
     general:
       externalScheme: https
-      externalDomain: ???
+      externalDomain: ${GN_BENCHMARK_EXTERNAL_DOMAIN}
 
     ingress:
       enabled: true
-      ingressClassName: ???
+      ingressClassName: ${GN_BENCHMARK_INGRESS_CLASS}
       annotations:
         nginx.ingress.kubernetes.io/proxy-body-size: 2048m
       addNginxIngressAnnotation: true
-      tlsSecret: geonode-tls-secret
+      tlsSecret: ${GN_BENCHMARK_TLS_SECRET_NAME}
 
     resources:
       requests:
@@ -65,7 +65,7 @@ geonode-k8s:
         cpu: 0.3
 
   postgres-operator:
-    enabled: true
+    enabled: false
 
   pycsw:
     enabled: True
@@ -78,15 +78,15 @@ geonode-k8s:
         cpu: 0.1
 
   rabbitmq:
-    clusterDomain: ???  # "draven.cluster"
+    clusterDomain: ${GN_BENCHMARK_CLUSTER_DOMAIN}
     persistence:
       enabled: true
-      storageclass: ???
+      storageclass: ${GN_BENCHMARK_STORAGE_CLASS}
       size: 3Gi
     resources:
       requests:
         memory: "128Mi"
-        cpu: 0.1            
+        cpu: 0.1
       limits:
         memory: "128Mi"
         cpu: 0.1
@@ -111,6 +111,6 @@ geonode-k8s:
       limits:
         memory: "128Mi"
         cpu: 0.1
-  
+
   favicon: |
     iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA0RJREFUeNpMU0tonVUQnjmv/3FzX8ntLbdNU0noG7XEYKWCC1dFxYWIhRZ1UdqV4EYFN27EhStBQbcKdefClS5EIdSFaLMoxE00om1M6m1jcvPf//6P858zzl8jODCcOXNmvjNP7LzzERA5aHdOgQl6LFcaABaYF5mfZH5ctTo5CPFaKPDWfMtARQQCATQiKHhABN7bFxDl8wywtA8QAnlAEwJKySIts+519vsM/keKvK0BZpPRL9cBMIriQQ22/4xOhlF9CfmzduHp08L78xLxDdYltYUgFPXxHKcRjXZW3XhvPUWhHdbuSpXMmvN6AOf42Jy4a1rgdwLxdK0VQbYBCP4lFJLTVHKcrEc72z8XqTUlhNOIqOR/aUpGTUpHw9wtBQI/ZEeUh+cnZ5JJ+S50jsmiEli4iAL6C85O39rNpfC5j6RSTUIMOVRRFw/HtoKmEb1Q4hcqK+HFZGslbIXd5NHjM/Kx7io9MrOuT/Sgfcf+bt++AZULDqGJ5gs0C0KYWQ61qW6nsnWqIy/I7pnWB/OdcX8xvukuL67B2dl7DXKl9KpfnDv6UDyIXfXNb3cNlmsBTVaEm6x4LNZtUY3REWr5ykX96sFGOuutNRtbJR081PUcqWzHfa/0tDo9I3Q70PnyHSG1UlyGSpG7p/zeMu5ufrkhn7ow0zBB9IzWJh+nBWxvZ9WRIzF2mwMfBR2dV4RLA2NCLYvv/yRRVdbmoz/ybHQ7IN3/WJ57urVBQFeMVlPNqZjSsXNZYbOHj5/k+IxiMd/LUjrRTqzxw7JLvxaLvUQ+cTRwc9PNt/DN9xfqOfzcVfYStwWUUn5nN02OnYzz/oEw5qCZKHTey1gRSm43zydIoX6UqnNe9dpzoKS+TuQv/Z1sju/e33JJksdbw0mYVcIooW2zEZVTcSQKoTUyhnMOAm2+iiQ6FQYR9xaXsyK9Wdp8iQ25hjrVssoDDbG1pHf20ng3mfiA/acaAbANcSRfW2dBeUg5BZyU/v6zQUBXQZhrnMjcga5uHB4osBXtDyIOPdEaD/gNBv1WxPon/HcbsX7kMZbDMAzeU9p/Ehp62VX+spRqJNiBR/wHNllFoE3NqzFK+FPejxrgHwEGAMcoeVdz37n7AAAAAElFTkSuQmCC

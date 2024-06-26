@@ -1,1 +1,4 @@
-draven.sh
+*-cluster-conf.sh
+geonode-k8s/Chart.lock
+geonode-k8s/charts/*
+geonode-k8s/*-values.yaml
