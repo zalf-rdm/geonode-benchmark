@@ -6,6 +6,8 @@ a repository containing all sourcecode and data to deploy and run geonode benchm
 requirements:
 - helm3
 - kubectl
+- locust
+- har2locust
 
 #### A) use templating to write configuration
 ```
@@ -21,3 +23,30 @@ helm upgrade --cleanup-on-fail  --install --namespace geonode-benchmark --create
 
 
 #### B) manual edit different helm configurations
+
+
+
+####
+install https://docs.locust.io/
+install https://github.com/SvenskaSpel/har2locust
+```
+pip install locust har2locust
+```
+
+Record your way with chrome dev tool, export .har
+Convert har to locustfile
+```
+har2locust mypath.har > locustfile.py
+```
+
+```
+locust 
+
+locust --headless --users 10 --spawn-rate 1 -H http://your-server.com
+
+# geonode stable
+locust --headless --users 10 --spawn-rate 1 -H https://stable.demo.geonode.org/#/
+```
+user: number of users
+spaw-rate: the speed at which these users are created in the beginning until the specified number of concurrent users are created
+H: Host
