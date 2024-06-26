@@ -25,3 +25,10 @@ helm delete geonode geonode-k8s
 ```
 
 #### B) manual edit different helm configurations
+
+
+## Benchmark
+
+requirements:
+- locust
+

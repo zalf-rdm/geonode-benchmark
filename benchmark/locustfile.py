@@ -53,8 +53,9 @@ class GeonodeLoadTest(FastHttpUser):
             catch_response=True,
         ) as resp:
             pass
-        with self.client.get(  # TODO Deleted uploaded dataset
-            "/",
+        with self.client.self.rest(  # TODO Delete dataset
+            "DELETE",
+            "/api/v2/resources/6/delete",
             catch_response=True,
         ) as resp:
             pass
