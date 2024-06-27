@@ -53,7 +53,7 @@ class GeonodeLoadTest(HttpUser):
         with self.client.request(
             "POST",
             "/account/login/",
-            data=f"csrfmiddlewaretoken={self.csrfmiddlewaretoken}&login={self.login}&password={self.geonode}&remember=on&next=%2F",
+            data=f"csrfmiddlewaretoken={self.csrfmiddlewaretoken}&login={self.login}&password={self.password}&remember=on&next=%2F",
             catch_response=True,
         ) as resp:
             pass
