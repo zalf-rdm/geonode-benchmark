@@ -11,6 +11,9 @@ class GeonodeLoadTest(FastHttpUser):
     password = os.environ["GEONODE_PASSWORD"]
     open_dataset_nr = 1825
     dataset_title = "Dia_phan_Tinh"
+    type_file = "application/json"
+    file = "./benchmark/datasets.1.geojson"
+    dataset = open(file, type_file)
 
     @task
     def login(self):
@@ -45,7 +48,21 @@ class GeonodeLoadTest(FastHttpUser):
         ) as resp:
             pass
         with self.client.get(  # TODO upload dataset
-            "/",
+            "https://stable.demo.geonode.org/catalogue/#/upload/dataset",
+            catch_response=True,
+        ) as resp:
+            pass
+        with self.client.post(
+            "/api/v2/uploads/upload",
+            headers={
+                "Authorization": "Basic dXNlcjpwYXNzd29yZA==",
+            },
+            files=[
+                (
+                    "geojson_file",
+                    ("test.geojson", {self.dataset}, {self.type_file}),
+                )
+            ],
             catch_response=True,
         ) as resp:
             pass
