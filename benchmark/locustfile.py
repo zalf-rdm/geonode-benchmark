@@ -1,13 +1,14 @@
 from locust import task, run_single_user
 from locust import FastHttpUser
+import os
 
 
 class GeonodeLoadTest(FastHttpUser):
     # I decided to point to stable geonode when building this file because when point to
     # "https://geonode-benchmark.draven.cluster.zalf.de/" it returns 100% error
     host = "https://stable.demo.geonode.org"
-    login = "forrbodo@gmail.com"
-    password = "geonode"
+    login = os.environ["GEONODE_LOGIN"]
+    password = os.environ["GEONODE_PASSWORD"]
     open_dataset_nr = 1825
     dataset_title = "Dia_phan_Tinh"
 
