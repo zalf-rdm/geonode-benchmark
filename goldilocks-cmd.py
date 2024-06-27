@@ -3,7 +3,9 @@ import logging
 import json
 import requests
 import urllib3
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 
 def configure_logging(debug, filename=None):
     """define loglevel and log to file or to std"""
