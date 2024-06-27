@@ -32,3 +32,8 @@ helm delete geonode geonode-k8s
 requirements:
 - locust
 
+To Run:
+```
+#https://geonode-benchmark.draven.cluster.zalf.de
+locust --users 10 --spawn-rate 10 -H https://stable.demo.geonode.org
+```
