@@ -13,7 +13,14 @@ class GeonodeLoadTest(FastHttpUser):
     dataset_title = "Dia_phan_Tinh"
     type_file = "application/json"
     file = "./benchmark/datasets.1.geojson"
-    dataset = open(file, type_file)
+    datasets = (
+        "geojson_file",
+        (
+            "test.geojson",
+            open("./datasets/0.geojson", "rb"),
+            "application/json",
+        ),
+    )
 
     @task
     def login(self):
@@ -47,22 +54,17 @@ class GeonodeLoadTest(FastHttpUser):
             catch_response=True,
         ) as resp:
             pass
-        with self.client.get(  # TODO upload dataset
+        with self.client.get(  # 5.UPLOAD DATASET: Go to upload dataset page
             "https://stable.demo.geonode.org/catalogue/#/upload/dataset",
             catch_response=True,
         ) as resp:
             pass
-        with self.client.post(
+        with self.client.post(  # 5.UPLOAD DATASET: Upload dataset with API
             "/api/v2/uploads/upload",
             headers={
                 "Authorization": "Basic dXNlcjpwYXNzd29yZA==",
             },
-            files=[
-                (
-                    "geojson_file",
-                    ("test.geojson", {self.dataset}, {self.type_file}),
-                )
-            ],
+            files=[self.datasets],
             catch_response=True,
         ) as resp:
             pass
@@ -71,9 +73,9 @@ class GeonodeLoadTest(FastHttpUser):
             catch_response=True,
         ) as resp:
             pass
-        with self.client.self.rest(  # TODO Delete dataset
-            "DELETE",
-            "/api/v2/resources/6/delete",
+        with self.client.delete(  # TODO Delete dataset
+            "/api/v2/resources/1",
+            headers={"Authorization": "Basic dXNlcjpwYXNzd29yZA=="},
             catch_response=True,
         ) as resp:
             pass
