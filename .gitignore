@@ -2,7 +2,7 @@
 geonode-k8s/Chart.lock
 geonode-k8s/charts/*
 geonode-k8s/*-values.yaml
-datasets/*
+datasets/*.geojson
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
