@@ -129,10 +129,16 @@ def upload_datasets_into_geonode():
         
         logging.debug("Uploading dataset: " + dataset)
         dataset_location = dataset
-        gnDatasets(env=gn_conf).upload(file_path=Path(dataset_location), gn_conf=gn_conf)
+        gnDatasets(env=gn_conf).upload(file_path=Path(dataset_location))
         uploaded_datasets += 1
         time.sleep(2)
     logging.info("finished uploading datasets into geonode ...")
+
+def delete_all_datasets():
+    logging.info("Deleting all datasets ...")
+    gn_conf = gnConf.from_env_vars()
+    geonode_datasets = gnDatasets(env=gn_conf).list( page_size=(1000))
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -163,6 +169,13 @@ def main():
         dest="upload_datasets_into_geonode",
         action="store_true",
         help="create datasets in geonode using env variables, like in geonodectl (GEONODE_API_BASIC_AUTH: dXNlcjpwYXNzd29yZA== # you can generate this string like: echo -n user:password | base64)...",
+    )
+
+    group.add_argument(
+        "--delete-all-datasets",
+        dest="delete_all_datastets",
+        action="store_true",
+        help="delete all datasets from geonode instance (all ALL!!!), like in geonodectl (GEONODE_API_BASIC_AUTH: dXNlcjpwYXNzd29yZA== # you can generate this string like: echo -n user:password | base64)...",
     )
 
     # logging
@@ -196,6 +209,8 @@ def main():
         generate_datasets()
     elif args.upload_datasets_into_geonode:
         upload_datasets_into_geonode()
+    elif args.delete_all_datastets:
+        delete_all_datastets()
     else:
         raise SystemExit(f"unexpected command ...") 
 
