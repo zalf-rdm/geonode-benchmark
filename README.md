@@ -15,16 +15,14 @@ source my-cluster-configuration.sh
 
 cat values-templates/geonode_half_recommended_resources.yaml | envsubst > geonode-k8s/geonode_half_recommended-values.yaml
 helm dependency build geonode-k8s/
-helm upgrade --cleanup-on-fail  --install --namespace geonode-benchmark --create-namespace --values geonode-k8s/geonode_half_recommended-values.yaml.yaml geonode geonode-k8s/
+helm upgrade --cleanup-on-fail  --install --namespace geonode-benchmark --create-namespace --values geonode-k8s/geonode_half_recommended-values.yaml geonode geonode-k8s/
 ```
-
+add user specific templating into /geonode-k8s/template folder. E.g. tls certificates.
 
 To Delete the deployment use:
 ```
 helm delete geonode geonode-k8s
 ```
-
-#### B) manual edit different helm configurations
 
 
 ## Benchmark

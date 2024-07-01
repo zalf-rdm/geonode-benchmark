@@ -1,23 +1,60 @@
+from locust import run_single_user, task
 
-from locust import HttpUser, run_single_user, task
+from utils import GenodeBenchmarkHttpUser
+from urllib.parse import urlparse, unquote
 
-from utils import __generate_random_title__, __pick_random_user__, __pick_random_dataset__,__get_random_user_auth_header__
+# requires: 
+# https://github.com/geopython/OWSLib/blob/master/owslib/csw.py
+class PycswLoadTest(GenodeBenchmarkHttpUser):
 
-class PycswLoadTest(HttpUser):
-
-    def on_start(self):
-        self.headers = __get_random_user_auth_header__()
-      
-      
-    def __get_dataset_url_from_links_type_by_extensions__(dataset, extension):
+    def __get_dataset_url_from_links_type_by_name__(self, dataset, name):
         for link in dataset["links"]:
-            if link["extension"] == extension:
-                return link["url"]
-        
+            if link["name"] == name:
+                domain_path = link["url"]
+                return urlparse(unquote(domain_path))
+
     @task
-    def get_metadata_xml(self):
-      url = self.__get_dataset_url_from_links_type_by_extensions__(dataset=__pick_random_dataset__(), extension="xml")
-      self.client.get(f"/catalogue/#/dataset/{pk}")
+    def get_metadata_atom(self):
+        url = self.__get_dataset_url_from_links_type_by_name__(
+            dataset=self.__pick_random_dataset__(), name="Atom"
+        )
+        self.client.get(url.path)
+
+
+    # @task
+    # def get_metadata_dif(self):
+    #     domain_path = self.__get_dataset_url_from_links_type_by_name__(
+    #         dataset=self.__pick_random_dataset__(), name="DIF"
+    #     )
+    #     self.client.get(domain_path)
+
+    # @task
+    # def get_metadata_dublin_core(self):
+    #     domain_path = self.__get_dataset_url_from_links_type_by_name__(
+    #         dataset=self.__pick_random_dataset__(), name="Dublin Core"
+    #     )
+    #     self.client.get(domain_path)
+
+    # @task
+    # def get_metadata_dublin_ebrim(self):
+    #     domain_path = self.__get_dataset_url_from_links_type_by_name__(
+    #         dataset=self.__pick_random_dataset__(), name="ebRIM"
+    #     )
+    #     self.client.get(domain_path)
+
+    # @task
+    # def get_metadata_dublin_fgdc(self):
+    #     domain_path = self.__get_dataset_url_from_links_type_by_name__(
+    #         dataset=self.__pick_random_dataset__(), name="FGDC"
+    #     )
+    #     self.client.get(domain_path)
+
+    # @task
+    # def get_metadata_dublin_iso(self):
+    #     domain_path = self.__get_dataset_url_from_links_type_by_name__(
+    #         dataset=self.__pick_random_dataset__(), name="ISO"
+    #     )
+    #     self.client.get(domain_path)
 
 
 if __name__ == "__main__":

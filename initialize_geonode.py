@@ -6,11 +6,11 @@ import os
 import glob
 import time
 from pathlib import Path
+import sys
 
 from geonoderest.apiconf import GeonodeApiConf as gnConf
 from geonoderest.users import GeonodeUsersHandler as gnUsers
 from geonoderest.datasets import GeonodeDatasetsHandler as gnDatasets
-
 
 import geopandas as gpd
 import geodatasets as gds
@@ -20,6 +20,7 @@ import geodatasets as gds
 
 USER_DATA_LOCATION = "datasets/users.txt"
 DATASET_LOCATION = "datasets/"
+
 
 def configure_logging(debug, filename=None):
     """define loglevel and log to file or to std"""
@@ -38,57 +39,71 @@ def configure_logging(debug, filename=None):
                 filename=filename, format="%(asctime)s %(message)s", level=logging.INFO
             )
 
+
 def __generate_random_username__(length):
     letters = string.ascii_lowercase
-    return ''.join(random.choice(letters) for _ in range(length))
+    return "".join(random.choice(letters) for _ in range(length))
+
 
 def __generate_random_password__(length):
     letters = string.ascii_letters + string.digits
-    return ''.join(random.choice(letters) for _ in range(length))
+    return "".join(random.choice(letters) for _ in range(length))
+
+
+def __generate_random_email__(length):
+    letters = string.ascii_lowercase
+    adress_name = "".join(random.choice(letters) for _ in range(length))
+    return f"{adress_name}@geonode-benchmark.org"
+
 
 def generate_user_file():
     logging.info("Generating users ...")
-    
-    num_of_users_to_create  = 500
-    
+
+    num_of_users_to_create = 500
+
     user_data = []
     used_usernames = set()
     while len(user_data) < num_of_users_to_create:
-        username = __generate_random_username__(12)
+        username = __generate_random_email__(12)
         while username in used_usernames:
-            username = __generate_random_username__(12)
-        password = __generate_random_password__(8)
+            username = __generate_random_email__(12)
+        password = "12345678"  # __generate_random_password__(8)
         user_data.append(f"{username}:{password}")
         used_usernames.add(username)
 
-    logging.info(f"writing random credentials of {num_of_users_to_create} users to {USER_DATA_LOCATION} ...")
+    logging.info(
+        f"writing random credentials of {num_of_users_to_create} users to {USER_DATA_LOCATION} ..."
+    )
     with open(USER_DATA_LOCATION, "w") as f:
         f.write("\n".join(user_data))
 
+
 def create_users_in_geonode():
     logging.info("Creating users in geonode ...")
-    
+
     with open(USER_DATA_LOCATION, "r") as f:
         user_data = f.read().splitlines()
 
     gn_conf = gnConf.from_env_vars()
     for user in user_data:
-        username,password = user.split(":")
-        
-        filter = {"username": username}
-        users = gnUsers(gn_conf).list(filter=filter)
-        if len(users) != 1:
-            logging.debug(f"creating user {username} ...")
-            json_user_description = {
-                "username": username,
-                "password": password
-            }
-            gnUsers(gn_conf).create(json_content=json_user_description)
-        else:
-            logging.debug(f"user {username} already exists ...")
-    
+        username, password = user.split(":")
+
+        # filter = {"username": username}
+        # users = gnUsers(gn_conf).list(filter=filter)
+        # if len(users) != 1:
+        logging.debug(f"creating user {username} ...")
+        json_user_description = {
+            "username": username,
+            "password": password,
+            "email": username,
+        }
+        gnUsers(gn_conf).create(json_content=json_user_description)
+        # else:
+        # logging.debug(f"user {username} already exists ...")
+
     logging.info("Finished creating users in geonode ...")
-        
+
+
 def generate_datasets():
     logging.info("Generating datasets ...")
     datasets_list = list(gds.data.flatten().keys())
@@ -97,47 +112,58 @@ def generate_datasets():
     for u in range(len(datasets_list)):
         dataset = gpd.read_file(gds.get_path(datasets_list[u]))
         if not isinstance(dataset, gpd.geodataframe.GeoDataFrame):
-          continue
+            continue
         dataset.to_file("./datasets/" + str(u) + ".geojson", driver="GeoJSON")
         # Size in MegaBytes
         size_datasets.append(
             os.stat("./datasets/" + str(u) + ".geojson").st_size / (1024 * 1024)
         )
     logging.info(f"Total size of generated datasets: {sum(size_datasets)} MB")
-    
-    
+
+
 def upload_datasets_into_geonode():
-    logging.info("Uploading datasets into geonode (requires to run --create-users-in-geonode before)...")
+    logging.info(
+        "Uploading datasets into geonode (requires to run --create-users-in-geonode before)..."
+    )
 
     # number of datasts to upload into geonode
     number_of_datasets = 100
-    
+
     try:
-      gn_conf = gnConf.from_env_vars()
-      geonode_datasets = gnDatasets(env=gn_conf).list( page_size=(number_of_datasets * 2))
-      uploaded_datasets = len(geonode_datasets[0])
-      logging.info(f"already found ({uploaded_datasets}) datasets in geonode ...")
+        gn_conf = gnConf.from_env_vars()
+        geonode_datasets = gnDatasets(env=gn_conf).list(
+            page_size=(number_of_datasets * 2)
+        )
+        uploaded_datasets = len(geonode_datasets)
+        logging.info(f"already found ({uploaded_datasets}) datasets in geonode ...")
     except:
-      logging.error("could not reach geonode at {gn_conf.url}...")
-      
+        url = gn_conf.url
+        logging.error(f"could not reach geonode at {url}...")
+        sys.exit(1)
+
     datasets = glob.glob(f"{DATASET_LOCATION}/*.geojson")
     while uploaded_datasets < number_of_datasets:
-      for dataset in datasets:
-        if uploaded_datasets >= number_of_datasets:
-           logging.info("maximum number of datasets reached ...")
-           return
-        
-        logging.debug("Uploading dataset: " + dataset)
-        dataset_location = dataset
-        gnDatasets(env=gn_conf).upload(file_path=Path(dataset_location))
-        uploaded_datasets += 1
-        time.sleep(2)
+        for dataset in datasets:
+            if uploaded_datasets >= number_of_datasets:
+                logging.info("maximum number of datasets reached ...")
+                return
+
+            logging.debug("Uploading dataset: " + dataset)
+            dataset_location = dataset
+            gnDatasets(env=gn_conf).upload(file_path=Path(dataset_location))
+            uploaded_datasets += 1
+            time.sleep(2)
     logging.info("finished uploading datasets into geonode ...")
+
 
 def delete_all_datasets():
     logging.info("Deleting all datasets ...")
     gn_conf = gnConf.from_env_vars()
-    geonode_datasets = gnDatasets(env=gn_conf).list( page_size=(1000))
+    geonode_datasets = gnDatasets(env=gn_conf).list(page_size=(1000))
+
+    for dataset in geonode_datasets:
+        logging.debug("deleting dataset: " + dataset["title"])
+        gnDatasets(env=gn_conf).delete(pk=dataset["pk"])
 
 
 def main():
@@ -149,7 +175,7 @@ def main():
         action="store_true",
         help="generate file with random user credentials in (datsets/users.txt) ...",
     )
-    
+
     group.add_argument(
         "--create-users-in-geonode",
         dest="create_users_in_geonode",
@@ -163,7 +189,7 @@ def main():
         action="store_true",
         help="generate datasets ...",
     )
-    
+
     group.add_argument(
         "--upload-dataset-into-geonode",
         dest="upload_datasets_into_geonode",
@@ -212,7 +238,8 @@ def main():
     elif args.delete_all_datastets:
         delete_all_datastets()
     else:
-        raise SystemExit(f"unexpected command ...") 
+        raise SystemExit(f"unexpected command ...")
+
 
 if __name__ == "__main__":
     main()
