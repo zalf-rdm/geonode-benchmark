@@ -9,9 +9,6 @@ from utils import GenodeBenchmarkHttpUser
 class GeonodeLoadTest(GenodeBenchmarkHttpUser):
     # wait_time = constant(1)
 
-    # I decided to point to stable geonode when building this file because when point to
-    # "https://geonode-benchmark.draven.cluster.zalf.de/" it returns 100% error
-
     uploaded_dataset = []
 
     def on_start(self):
