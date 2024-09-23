@@ -1,4 +1,6 @@
 
+import random
+
 from locust import run_single_user, task
 
 from utils import GenodeBenchmarkHttpUser
@@ -29,5 +31,31 @@ class GeoserverLoadTest(GenodeBenchmarkHttpUser):
 
     @task
     def get_random_featuretype(self):
-        pass
-        #r_workspaces = self.client.get("/geoserver/rest/workspaces/geonode/datastores/geodata.json")
+        r_featuretypes = self.client.get("/geoserver/rest/workspaces/geonode/datastores/geodata/featuretypes.json")
+        featuretypes = r_featuretypes.json()['featureTypes']['featureType']
+
+        if len(featuretypes) > 0:
+            i = random.randint(0, len(featuretypes) - 1)
+            featuretype = featuretypes[i]
+            r_featuretype = self.client.get(f"/geoserver/rest/workspaces/geonode/datastores/geodata/featuretypes/{featuretype['name']}.json")
+
+    ###################
+    # WFS interaction #
+    ###################
+    # https://github.com/geopython/OWSLib/tree/master/examples
+
+    # WFS_DOWNLOAD_FORMATS = ["excel","excel2007", "kml", "shp", "csv"]
+    
+    # @task
+    # def wfs_download_in_random_format(self):
+    #     r_featuretypes = self.client.get("/geoserver/rest/workspaces/geonode/datastores/geodata/featuretypes.json")
+    #     featuretypes = r_featuretypes.json()['featureTypes']['featureType']
+        
+    #     if len(featuretypes) > 0:
+    #         i = random.randint(0, len(featuretypes) - 1)
+    #         featuretype = featuretypes[i]
+    #         {featuretype['name']}
+
+    ###################
+    # WMS interaction #
+    ###################

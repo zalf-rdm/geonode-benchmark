@@ -54,37 +54,37 @@ class GeonodeLoadTest(GenodeBenchmarkHttpUser):
         r = self.client.get(f"/datasets/geonode:{name}/dataset_download")
 
     # TODO buggy
-    # @task(8)
-    # def dataset_upload(self):
-    #     dataset_path = Path(self.__pick_random_file__())
+    @task(8)
+    def dataset_upload(self):
+        dataset_path = Path(self.__pick_random_file__())
 
-    #     files = [
-    #         (
-    #             "base_file",
-    #             (
-    #                 dataset_path.name,
-    #                 open(str(dataset_path), "rb"),
-    #                 "application/geo+json",
-    #             ),
-    #         ),
-    #     ]
+        files = [
+            (
+                "base_file",
+                (
+                    dataset_path.name,
+                    open(str(dataset_path), "rb"),
+                    "application/geo+json",
+                ),
+            ),
+        ]
 
-    #     params = {
-    #         # layer permissions
-    #         "permissions": '{ "users": {"AnonymousUser": ["view_resourcebase"]} , "groups":{}}',
-    #         "mosaic": False,
-    #         "time": str(False),
-    #         "charset": "UTF-8",
-    #         "non_interactive": True,
-    #     }
-    #     r = self.client.post(
-    #         "/api/v2/uploads/upload", files=files, headers=self.headers, params=params
-    #     )
+        params = {
+            # layer permissions
+            "permissions": '{ "users": {"AnonymousUser": ["view_resourcebase"]} , "groups":{}}',
+            "mosaic": False,
+            "time": str(False),/geoserver/rest/workspaces/geonode/datastores/geodata.json
+            "charset": "UTF-8",
+            "non_interactive": True,
+        }
+        r = self.client.post(
+            "/api/v2/uploads/upload", files=files, headers=self.headers, params=params
+        )
 
-    #     gn_conf = gnConf.from_env_vars()
-    #     exec_id = r.json()["upload"]["execution_id"]
-    #     pk = self.__wait_and_get_upload_pk__(exec_id, gnConf)
-    #     self.uploaded_dataset.append(pk)
+        gn_conf = gnConf.from_env_vars()
+        exec_id = r.json()["upload"]["execution_id"]
+        pk = self.__wait_and_get_upload_pk__(exec_id, gnConf)
+        self.uploaded_dataset.append(pk)
 
     @task(9)
     def dataset_delete(self):

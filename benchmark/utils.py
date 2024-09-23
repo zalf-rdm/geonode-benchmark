@@ -32,6 +32,13 @@ class GenodeBenchmarkHttpUser(HttpUser):
         return {"Authorization": f"Basic {gn_conf.auth_basic}"}
 
     def on_start(self):
+        """
+        Called when the user starts running.
+
+        This is the place to perform any setup that should happen before the user
+        starts running, such as setting up the headers with a random user.
+
+        """
         self.headers = self.__get_random_user_auth_header__()
 
     # TODO write a method that deletes all uploads
@@ -59,7 +66,7 @@ class GenodeBenchmarkHttpUser(HttpUser):
 
         return dataset_path
 
-    def __wait_and_get_upload_pk__(self, execid: str, gnConf: gnConf) -> int:
+    def __wait_and_get_upload_pk__(self, execid: str) -> int:
         """
         Wait for the upload to finish and retrieve the primary key (pk) of the upload.
 
