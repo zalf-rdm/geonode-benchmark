@@ -1,14 +1,14 @@
 
 from urllib.parse import urlparse, unquote
 
-from owslib.csw import CatalogueServiceWeb
-from locust import run_single_user, task
+from locust import run_single_user, task, between
 
 from utils import GenodeBenchmarkHttpUser
 
 # requires: 
 # https://github.com/geopython/OWSLib/blob/master/owslib/csw.py
 class PycswLoadTest(GenodeBenchmarkHttpUser):
+    wait_time = between(1, 5)
 
     #outputschema = 'http://www.isotc211.org/2005/gmd'
     lang = 'en-US'
@@ -23,53 +23,53 @@ class PycswLoadTest(GenodeBenchmarkHttpUser):
     ###################
     # CSW interaction #
     ###################
-    # @task
-    # def get_metadata_atom(self):
-    #     url = self.__get_dataset_url_from_links_type_by_name__(
-    #         dataset=self.__pick_random_dataset__(), name="Atom"
-    #     )
-    #     # TODO try from ZALF
-    #     c = CatalogueServiceWeb(url, self.lang, self.version)
-
-
-    
-
+    @task
+    def get_metadata_atom(self):
+        domain_path = self.__get_dataset_url_from_links_type_by_name__(
+            dataset=self.__pick_random_dataset__(), name="Atom"
+        )
+        if domain_path is not None:
+            self.client.get(domain_path.geturl())
+  
     @task
     def get_metadata_dif(self):
         domain_path = self.__get_dataset_url_from_links_type_by_name__(
             dataset=self.__pick_random_dataset__(), name="DIF"
         )
-        breakpoint()
-        self.client.get(domain_path.geturl())
+        if domain_path is not None:
+            self.client.get(domain_path.geturl())
+  
+    @task
+    def get_metadata_dublin_core(self):
+        domain_path = self.__get_dataset_url_from_links_type_by_name__(
+            dataset=self.__pick_random_dataset__(), name="Dublin Core"
+        )
+        if domain_path is not None:
+            self.client.get(domain_path.geturl())
 
-    # @task
-    # def get_metadata_dublin_core(self):
-    #     domain_path = self.__get_dataset_url_from_links_type_by_name__(
-    #         dataset=self.__pick_random_dataset__(), name="Dublin Core"
-    #     )
-    #     self.client.get(domain_path)
+    @task
+    def get_metadata_dublin_ebrim(self):
+        domain_path = self.__get_dataset_url_from_links_type_by_name__(
+            dataset=self.__pick_random_dataset__(), name="ebRIM"
+        )
+        if domain_path is not None:
+            self.client.get(domain_path.geturl())
 
-    # @task
-    # def get_metadata_dublin_ebrim(self):
-    #     domain_path = self.__get_dataset_url_from_links_type_by_name__(
-    #         dataset=self.__pick_random_dataset__(), name="ebRIM"
-    #     )
-    #     self.client.get(domain_path)
+    @task
+    def get_metadata_dublin_fgdc(self):
+        domain_path = self.__get_dataset_url_from_links_type_by_name__(
+            dataset=self.__pick_random_dataset__(), name="FGDC"
+        )
+        if domain_path is not None:
+            self.client.get(domain_path.geturl())
 
-    # @task
-    # def get_metadata_dublin_fgdc(self):
-    #     domain_path = self.__get_dataset_url_from_links_type_by_name__(
-    #         dataset=self.__pick_random_dataset__(), name="FGDC"
-    #     )
-    #     self.client.get(domain_path)
-
-    # @task
-    # def get_metadata_dublin_iso(self):
-    #     domain_path = self.__get_dataset_url_from_links_type_by_name__(
-    #         dataset=self.__pick_random_dataset__(), name="ISO"
-    #     )
-    #     self.client.get(domain_path)
-
+    @task
+    def get_metadata_dublin_iso(self):
+        domain_path = self.__get_dataset_url_from_links_type_by_name__(
+            dataset=self.__pick_random_dataset__(), name="ISO"
+        )
+        if domain_path is not None:
+            self.client.get(domain_path.geturl())
 
 if __name__ == "__main__":
     run_single_user(PycswLoadTest)

@@ -32,6 +32,5 @@ requirements:
 
 To Run:
 ```
-#https://geonode-benchmark.draven.cluster.zalf.de
-locust --users 10 --spawn-rate 10 -H https://geonode-benchmark.draven.cluster.zalf.de -f benchmark/
+locust --users 10 --spawn-rate 10 --processes 4 -H https://geonode-benchmark.draven.cluster.zalf.de -f benchmark/
 ```

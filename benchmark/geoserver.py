@@ -1,26 +1,27 @@
 
 import random
 
-from locust import run_single_user, task
+from locust import run_single_user, task, between
 
 from utils import GenodeBenchmarkHttpUser
 
 class GeoserverLoadTest(GenodeBenchmarkHttpUser):
+    wait_time = between(1, 5)
 
     def on_start(self):
         # TODO admin:geoserver
         self.client.headers = {"Authorization": "Basic YWRtaW46Z2Vvc2VydmVy"}
 
-    @task
+    @task(2)
     def get_about(self):
         r = self.client.get("/geoserver/rest/about/version.xml")
 
 
-    @task
+    @task(2)
     def list_all_layers(self):
         r = self.client.get("/geoserver/rest/layers.json")
 
-    @task
+    @task(3)
     def get_geodata_workspace(self):
         """
         Task to test the geoserver rest api by retrieving the
@@ -29,7 +30,7 @@ class GeoserverLoadTest(GenodeBenchmarkHttpUser):
         r_workspaces = self.client.get("/geoserver/rest/workspaces/geonode/datastores/geodata.json")
 
 
-    @task
+    @task(3)
     def get_random_featuretype(self):
         r_featuretypes = self.client.get("/geoserver/rest/workspaces/geonode/datastores/geodata/featuretypes.json")
         featuretypes = r_featuretypes.json()['featureTypes']['featureType']
