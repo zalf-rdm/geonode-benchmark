@@ -23,23 +23,24 @@ class PycswLoadTest(GenodeBenchmarkHttpUser):
     ###################
     # CSW interaction #
     ###################
-    @task
-    def get_metadata_atom(self):
-        url = self.__get_dataset_url_from_links_type_by_name__(
-            dataset=self.__pick_random_dataset__(), name="Atom"
-        )
-        # TODO try from ZALF
-        c = CatalogueServiceWeb(url, self.lang, self.version)
+    # @task
+    # def get_metadata_atom(self):
+    #     url = self.__get_dataset_url_from_links_type_by_name__(
+    #         dataset=self.__pick_random_dataset__(), name="Atom"
+    #     )
+    #     # TODO try from ZALF
+    #     c = CatalogueServiceWeb(url, self.lang, self.version)
 
 
     
 
-    # @task
-    # def get_metadata_dif(self):
-    #     domain_path = self.__get_dataset_url_from_links_type_by_name__(
-    #         dataset=self.__pick_random_dataset__(), name="DIF"
-    #     )
-    #     self.client.get(domain_path)
+    @task
+    def get_metadata_dif(self):
+        domain_path = self.__get_dataset_url_from_links_type_by_name__(
+            dataset=self.__pick_random_dataset__(), name="DIF"
+        )
+        breakpoint()
+        self.client.get(domain_path.geturl())
 
     # @task
     # def get_metadata_dublin_core(self):
