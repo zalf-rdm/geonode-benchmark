@@ -7,7 +7,7 @@ requirements:
 - helm3
 - kubectl
 
-#### A) use templating to write configuration
+#### A) use templating to write configuration and deploy your GeoNode Kubernetes installation
 ```
 cp cluster-configuration-template.sh my-cluster-configuration.sh
 vim my-cluster-configuration.sh
@@ -24,13 +24,30 @@ To Delete the deployment use:
 helm delete geonode geonode-k8s
 ```
 
+#### B) ...
 
-## Benchmark
+
+## simple Benchmark
 
 requirements:
 - locust
 
-To Run:
+To simply run locust use something like (or check docs: https://docs.locust.io/en/stable/configuration.html):
 ```
-locust --users 10 --spawn-rate 10 --processes 4 -H https://geonode-benchmark.draven.cluster.zalf.de -f benchmark/
+locust --users 10 --spawn-rate 10 --processes 4 -H $GN_BENCHMARK_EXTERNAL_DOMAIN -f benchmark/
 ```
+
+```
+ LOCUST_TESTNAME==test1; locust
+  --processes 4
+  --headless
+  --users 100
+  --spawn-rate 0.033333333 
+  --run-time 52m 
+  --stop-timeout 10s
+  -H "$GN_BENCHMARK_EXTERNAL_DOMAIN"
+  --csv "results/$LOCUST_TESTNAME.csv"
+  --html "results/$LOCUST_TESTNAME.html"
+  --loglevel INFO
+  --logfile "results/$LOCUST_TESTNAME.log"
+  --locustfile benchmark/
