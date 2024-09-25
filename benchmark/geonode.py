@@ -162,14 +162,14 @@ class GeonodeLoadTest(GenodeBenchmarkHttpUser):
             time.sleep(1)
             i += 1
 
-        pk = r_exec["request"]["output_params"]["resources"]["id"]
+        pk = r_exec["request"]["output_params"]["resources"][0]["id"]
         self.uploaded_dataset.append(pk)
 
     @task(1)
     def dataset_delete(self):
       
       if len(self.uploaded_dataset) > 0:
-        self.client.delete(f"/datasets/{self.uploaded_dataset.pop()}")
+        self.client.delete(f"api/v2/resources/{self.uploaded_dataset.pop()}/delete")
 
 
 
