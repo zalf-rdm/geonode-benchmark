@@ -8,7 +8,7 @@ from utils import GenodeBenchmarkHttpUser
 
 
 class GeonodeLoadTest(GenodeBenchmarkHttpUser):
-    wait_time = between(1, 5)
+    wait_time = between(1, 3)
     
     uploaded_dataset = []
 
@@ -20,46 +20,46 @@ class GeonodeLoadTest(GenodeBenchmarkHttpUser):
         self.client.get("/static/geonode/img/favicon.ico")
 
     @task(6)
-    def index_page(self):
+    def get_index_page(self):
         self.client.get("/")
 
     # https://stackoverflow.com/questions/69338669/locust-io-and-javascript
     @task(6)
-    def dataset_landing_page(self):
+    def get_dataset_landing_page(self):
         dataset = self.__pick_random_dataset__()
         pk = dataset["pk"]
         self.client.get(f"/catalogue/#/dataset/{pk}")
 
     @task(4)
-    def metadata_editor(self):
+    def get_metadata_editor(self):
         dataset = self.__pick_random_dataset__()
         name = dataset["name"]
         r = self.client.get(f"/datasets/geodata:geonode:{name}/metadata")
 
     @task(2)
-    def advanced_metadata_editor(self):
+    def get_advanced_metadata_editor(self):
         dataset = self.__pick_random_dataset__()
         name = dataset["name"]
         self.client.get(f"/datasets/geodata:geonode:{name}/metadata_advanced")
 
     @task(2)
-    def admin_profile(self):
+    def get_admin_profile(self):
         # username, password = __pick_random_user__()
         self.client.get("/people/profile/admin")
 
     @task(6)
-    def random_profile(self):
+    def get_random_profile(self):
         username, _ = self.__pick_random_user__()
         self.client.get(f"/people/profile/{username}")  # ,auth=(username, password))
 
     @task(4)
-    def random_dataset_download(self):
+    def get_random_dataset_download(self):
         dataset = self.__pick_random_dataset__()
         name = dataset["name"]
         r = self.client.get(f"/datasets/geonode:{name}/dataset_download")
 
     @task(2)
-    def random_dataset_wms_legend_png(self):
+    def get_random_dataset_wms_legend_png(self):
         dataset = self.__pick_random_dataset__()
         links = dataset["links"]
         url = None
@@ -72,7 +72,7 @@ class GeonodeLoadTest(GenodeBenchmarkHttpUser):
           self.client.get(url)
 
     @task(2)
-    def random_dataset_wms_png(self):
+    def get_random_dataset_wms_png(self):
         dataset = self.__pick_random_dataset__()
         links = dataset["links"]
         url = None
@@ -86,7 +86,7 @@ class GeonodeLoadTest(GenodeBenchmarkHttpUser):
 
 
     @task(2)
-    def random_dataset_wms_xml(self):
+    def get_random_dataset_wms_xml(self):
         dataset = self.__pick_random_dataset__()
         links = dataset["links"]
         url = None
@@ -99,7 +99,7 @@ class GeonodeLoadTest(GenodeBenchmarkHttpUser):
           self.client.get(url)
 
     @task(2)
-    def random_dataset_wms_jpg(self):
+    def get_random_dataset_wms_jpg(self):
         dataset = self.__pick_random_dataset__()
         links = dataset["links"]
         url = None
@@ -113,7 +113,7 @@ class GeonodeLoadTest(GenodeBenchmarkHttpUser):
           
 
     @task(2)
-    def random_dataset_wms_pdf(self):
+    def get_random_dataset_wms_pdf(self):
         dataset = self.__pick_random_dataset__()
         links = dataset["links"]
         url = None
@@ -125,8 +125,8 @@ class GeonodeLoadTest(GenodeBenchmarkHttpUser):
         if url is not None:
           self.client.get(url)
 
-    @task(1)
-    def dataset_upload(self):
+    @task(2)
+    def upload_dataset(self):
         dataset_path = Path(self.__pick_random_file__())
 
         files = [
@@ -166,7 +166,7 @@ class GeonodeLoadTest(GenodeBenchmarkHttpUser):
         self.uploaded_dataset.append(pk)
 
     @task(1)
-    def dataset_delete(self):
+    def delete_dataset(self):
       
       if len(self.uploaded_dataset) > 0:
         self.client.delete(f"api/v2/resources/{self.uploaded_dataset.pop()}/delete")

@@ -8,7 +8,7 @@ from utils import GenodeBenchmarkHttpUser
 # requires: 
 # https://github.com/geopython/OWSLib/blob/master/owslib/csw.py
 class PycswLoadTest(GenodeBenchmarkHttpUser):
-    wait_time = between(1, 5)
+    wait_time = between(1, 3)
 
     #outputschema = 'http://www.isotc211.org/2005/gmd'
     lang = 'en-US'
@@ -23,7 +23,7 @@ class PycswLoadTest(GenodeBenchmarkHttpUser):
     ###################
     # CSW interaction #
     ###################
-    @task
+    @task(3)
     def get_metadata_atom(self):
         domain_path = self.__get_dataset_url_from_links_type_by_name__(
             dataset=self.__pick_random_dataset__(), name="Atom"
@@ -31,7 +31,7 @@ class PycswLoadTest(GenodeBenchmarkHttpUser):
         if domain_path is not None:
             self.client.get(domain_path.geturl())
   
-    @task
+    @task(3)
     def get_metadata_dif(self):
         domain_path = self.__get_dataset_url_from_links_type_by_name__(
             dataset=self.__pick_random_dataset__(), name="DIF"
@@ -39,7 +39,7 @@ class PycswLoadTest(GenodeBenchmarkHttpUser):
         if domain_path is not None:
             self.client.get(domain_path.geturl())
   
-    @task
+    @task(3)
     def get_metadata_dublin_core(self):
         domain_path = self.__get_dataset_url_from_links_type_by_name__(
             dataset=self.__pick_random_dataset__(), name="Dublin Core"
@@ -47,7 +47,7 @@ class PycswLoadTest(GenodeBenchmarkHttpUser):
         if domain_path is not None:
             self.client.get(domain_path.geturl())
 
-    @task
+    @task(3)
     def get_metadata_dublin_ebrim(self):
         domain_path = self.__get_dataset_url_from_links_type_by_name__(
             dataset=self.__pick_random_dataset__(), name="ebRIM"
@@ -55,7 +55,7 @@ class PycswLoadTest(GenodeBenchmarkHttpUser):
         if domain_path is not None:
             self.client.get(domain_path.geturl())
 
-    @task
+    @task(3)
     def get_metadata_dublin_fgdc(self):
         domain_path = self.__get_dataset_url_from_links_type_by_name__(
             dataset=self.__pick_random_dataset__(), name="FGDC"
@@ -63,7 +63,7 @@ class PycswLoadTest(GenodeBenchmarkHttpUser):
         if domain_path is not None:
             self.client.get(domain_path.geturl())
 
-    @task
+    @task(3)
     def get_metadata_dublin_iso(self):
         domain_path = self.__get_dataset_url_from_links_type_by_name__(
             dataset=self.__pick_random_dataset__(), name="ISO"

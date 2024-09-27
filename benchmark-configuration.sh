@@ -1,4 +1,5 @@
 export GN_BENCHMARK_CLUSTER_DOMAIN="draven.cluster"
+export GN_BENCHMARK_NAMESPACE="geonode-benchmark"
 export GN_BENCHMARK_INGRESS_CLASS="nginx-internal"
 export GN_BENCHMARK_EXTERNAL_DOMAIN="https://geonode-benchmark.draven.cluster.zalf.de"
 export GN_BENCHMARK_STORAGE_CLASS="nfs-csi-delete"
