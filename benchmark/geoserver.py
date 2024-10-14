@@ -33,12 +33,14 @@ class GeoserverLoadTest(GenodeBenchmarkHttpUser):
     @task(5)
     def get_random_featuretype(self):
         r_featuretypes = self.client.get("/geoserver/rest/workspaces/geonode/datastores/geodata/featuretypes.json")
+        if r_featuretypes is None:
+          r_featuretypes.failure("response empty")
         featuretypes = r_featuretypes.json()['featureTypes']['featureType']
 
         if len(featuretypes) > 0:
             i = random.randint(0, len(featuretypes) - 1)
             featuretype = featuretypes[i]
-            r_featuretype = self.client.get(f"/geoserver/rest/workspaces/geonode/datastores/geodata/featuretypes/{featuretype['name']}.json")
+            self.client.get(f"/geoserver/rest/workspaces/geonode/datastores/geodata/featuretypes/{featuretype['name']}.json")
 
     ###################
     # WFS interaction #

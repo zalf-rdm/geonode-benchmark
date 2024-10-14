@@ -1,0 +1,126 @@
+# https://docs.geonode.org/en/master/start/quick/
+# half of recommended recources
+# Accumulated all services together share limit of:
+# - 4GB RAM
+# - 4 CPU Cores
+
+#geonode-k8s:
+global:
+  storageClass: nfs-csi-delete
+
+geonode:
+  replicaCount: 1
+  persistant:
+    storageSize: 10Gi
+
+  general:
+    externalScheme: https
+    externalDomain: geonode-benchmark.draven.cluster.zalf.de
+
+  register:
+    open_signup: True
+    email_verification: "False"
+    authentication_method: username_email
+
+  ingress:
+    enabled: true
+    ingressClassName: nginx-internal
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-body-size: 2048m
+    addNginxIngressAnnotation: true
+    tlsSecret: geonode-tls-secret
+
+  resources:
+    requests:
+      memory: "8192Mi"
+      cpu: 4
+    limits:
+      memory: "8192Mi"
+      cpu: 4
+
+celery:
+  replicaCount: 1
+  resources:
+    requests:
+      memory: "2048Mi"
+      cpu: 2
+    limits:
+      memory: "2048Mi"
+      cpu: 2
+
+geoserver:
+  replicaCount: 1
+  resources:
+    requests:
+      memory: "8192Mi"
+      cpu: 4
+    limits:
+      memory: "8192Mi"
+      cpu: 4
+
+postgres-operator:
+  enabled: false
+
+postgres:
+  type: operator
+  operator:
+    storageSize: 2Gi
+    numberOfInstances: 1
+  resources:
+    requests:
+      memory: "2048Mi"
+      cpu: 2
+    limits:
+      memory: "2048Mi"
+      cpu: 2
+
+pycsw:
+  enabled: True
+  replicaCount: 1
+  resources:
+    requests:
+      memory: "2048Mi"
+      cpu: 1
+    limits:
+      memory: "2048Mi"
+      cpu: 1
+  endpoint: /catalogue/csw
+
+favicon: |
+  iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA0RJREFUeNpMU0tonVUQnjmv/3FzX8ntLbdNU0noG7XEYKWCC1dFxYWIhRZ1UdqV4EYFN27EhStBQbcKdefClS5EIdSFaLMoxE00om1M6m1jcvPf//6P858zzl8jODCcOXNmvjNP7LzzERA5aHdOgQl6LFcaABaYF5mfZH5ctTo5CPFaKPDWfMtARQQCATQiKHhABN7bFxDl8wywtA8QAnlAEwJKySIts+519vsM/keKvK0BZpPRL9cBMIriQQ22/4xOhlF9CfmzduHp08L78xLxDdYltYUgFPXxHKcRjXZW3XhvPUWhHdbuSpXMmvN6AOf42Jy4a1rgdwLxdK0VQbYBCP4lFJLTVHKcrEc72z8XqTUlhNOIqOR/aUpGTUpHw9wtBQI/ZEeUh+cnZ5JJ+S50jsmiEli4iAL6C85O39rNpfC5j6RSTUIMOVRRFw/HtoKmEb1Q4hcqK+HFZGslbIXd5NHjM/Kx7io9MrOuT/Sgfcf+bt++AZULDqGJ5gs0C0KYWQ61qW6nsnWqIy/I7pnWB/OdcX8xvukuL67B2dl7DXKl9KpfnDv6UDyIXfXNb3cNlmsBTVaEm6x4LNZtUY3REWr5ykX96sFGOuutNRtbJR081PUcqWzHfa/0tDo9I3Q70PnyHSG1UlyGSpG7p/zeMu5ufrkhn7ow0zBB9IzWJh+nBWxvZ9WRIzF2mwMfBR2dV4RLA2NCLYvv/yRRVdbmoz/ybHQ7IN3/WJ57urVBQFeMVlPNqZjSsXNZYbOHj5/k+IxiMd/LUjrRTqzxw7JLvxaLvUQ+cTRwc9PNt/DN9xfqOfzcVfYStwWUUn5nN02OnYzz/oEw5qCZKHTey1gRSm43zydIoX6UqnNe9dpzoKS+TuQv/Z1sju/e33JJksdbw0mYVcIooW2zEZVTcSQKoTUyhnMOAm2+iiQ6FQYR9xaXsyK9Wdp8iQ25hjrVssoDDbG1pHf20ng3mfiA/acaAbANcSRfW2dBeUg5BZyU/v6zQUBXQZhrnMjcga5uHB4osBXtDyIOPdEaD/gNBv1WxPon/HcbsX7kMZbDMAzeU9p/Ehp62VX+spRqJNiBR/wHNllFoE3NqzFK+FPejxrgHwEGAMcoeVdz37n7AAAAAElFTkSuQmCC
+
+nginx:
+  replicaCount: 1
+  maxClientBodySize: 2G
+  resources:
+    requests:
+      memory: "1024Mi"
+      cpu: 1
+    limits:
+      memory: "1024Mi"
+      cpu: 1
+
+rabbitmq:
+  replicaCount: 1
+  image:
+    debug: false
+  clusterDomain: "draven.cluster"
+  persistence:
+    enabled: true
+  resources:
+    requests:
+      memory: "1024Mi"
+      cpu: 1
+    limits:
+      memory: "1024Mi"
+      cpu: 1
+
+memcached:
+  replicaCount: 1
+  resources:
+    requests:
+      memory: "1024Mi"
+      cpu: 1
+    limits:
+      memory: "1024Mi"
+      cpu: 1

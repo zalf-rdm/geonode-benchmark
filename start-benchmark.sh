@@ -10,16 +10,18 @@
 source benchmark-configuration.sh
 export LOCUST_TESTNAME=`date +%Y%m%d%H%M%S`;
 
-./monitor.sh $GN_BENCHMARK_NAMESPACE > "results/monitoring_$LOCUST_TESTNAME.log" &
+./monitor.sh $GN_BENCHMARK_NAMESPACE > "results/$LOCUST_TESTNAME-monitoring.log" &
 processId=$!
 
+
+  # --processes 4 \
+
 locust \
-  --processes 4 \
   -f benchmark/ \
-  --autostart \
-  --users 500 \
-  --spawn-rate 1 \
-  --run-time 30m \
+  --headless \
+  --users 100 \
+  --spawn-rate 0.1666 \
+  --run-time 10m \
   --stop-timeout 10s \
   -H "$GN_BENCHMARK_EXTERNAL_DOMAIN" \
   --csv "results/$LOCUST_TESTNAME.csv" \
