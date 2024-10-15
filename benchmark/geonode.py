@@ -169,8 +169,8 @@ class GeonodeLoadTest(GenodeBenchmarkHttpUser):
     def delete_dataset(self):
       
       if len(self.uploaded_dataset) > 0:
-        self.client.delete(f"api/v2/resources/{self.uploaded_dataset.pop()}/delete")
-
+        i = str(self.uploaded_dataset.pop())
+        self.client.delete(f"api/v2/resources/{i}/delete")
 
 
 if __name__ == "__main__":

@@ -13,7 +13,6 @@ export LOCUST_TESTNAME=`date +%Y%m%d%H%M%S`;
 ./monitor.sh $GN_BENCHMARK_NAMESPACE > "results/$LOCUST_TESTNAME-monitoring.log" &
 processId=$!
 
-
   # --processes 4 \
 
 locust \
