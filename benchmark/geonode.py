@@ -52,11 +52,11 @@ class GeonodeLoadTest(GenodeBenchmarkHttpUser):
         username, _ = self.__pick_random_user__()
         self.client.get(f"/people/profile/{username}")  # ,auth=(username, password))
 
-    @task(4)
-    def get_random_dataset_download(self):
-        dataset = self.__pick_random_dataset__()
-        name = dataset["name"]
-        r = self.client.get(f"/datasets/geonode:{name}/dataset_download")
+    # @task(4)
+    # def get_random_dataset_download(self):
+    #     dataset = self.__pick_random_dataset__()
+    #     name = dataset["name"]
+    #     r = self.client.get(f"/datasets/geonode:{name}/dataset_download")
 
     @task(2)
     def get_random_dataset_wms_legend_png(self):
@@ -165,12 +165,11 @@ class GeonodeLoadTest(GenodeBenchmarkHttpUser):
         pk = r_exec["request"]["output_params"]["resources"][0]["id"]
         self.uploaded_dataset.append(pk)
 
-    @task(1)
-    def delete_dataset(self):
-      
-      if len(self.uploaded_dataset) > 0:
-        i = str(self.uploaded_dataset.pop())
-        self.client.delete(f"api/v2/resources/{i}/delete")
+    # @task(1)
+    # def delete_dataset(self):
+    #   if len(self.uploaded_dataset) > 0:
+    #     i = str(self.uploaded_dataset.pop())
+    #     self.client.delete(f"api/v2/resources/{i}/delete")
 
 
 if __name__ == "__main__":

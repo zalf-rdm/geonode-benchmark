@@ -18,14 +18,15 @@ processId=$!
 locust \
   -f benchmark/ \
   --headless \
-  --users 100 \
-  --spawn-rate 0.1666 \
-  --run-time 10m \
+  --users 200 \
+  --spawn-rate 0.16666 \
+  --run-time 20m \
   --stop-timeout 10s \
   -H "$GN_BENCHMARK_EXTERNAL_DOMAIN" \
   --csv "results/$LOCUST_TESTNAME.csv" \
   --html "results/$LOCUST_TESTNAME.html" \
   --loglevel INFO \
   --logfile "results/$LOCUST_TESTNAME.log"
-  
+
 kill $processId
+echo "execute save-logs.sh"

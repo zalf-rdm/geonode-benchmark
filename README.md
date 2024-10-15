@@ -62,7 +62,7 @@ requirements:
 
 Before running the evaluation benchmarks you can run a simple run of locust using:
 ```
-locust --users 10 --spawn-rate 10 --processes 4 -H $GN_BENCHMARK_EXTERNAL_DOMAIN -f benchmark/
+locust --users 100 --spawn-rate 10 --processes 4 -H $GN_BENCHMARK_EXTERNAL_DOMAIN -f benchmark/
 ```
 
 For evaluation use: (or check docs: https://docs.locust.io/en/stable/configuration.html)

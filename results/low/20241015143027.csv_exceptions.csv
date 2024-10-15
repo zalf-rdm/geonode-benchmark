@@ -1,0 +1,60 @@
+Count,Message,Traceback,Nodes
+311,Expecting value: line 1 column 1 (char 0),"  File ""/home/mwall/Sourcecode/geonode-benchmark/venv/lib/python3.10/site-packages/locust/user/task.py"", line 340, in run
+    self.execute_next_task()
+  File ""/home/mwall/Sourcecode/geonode-benchmark/venv/lib/python3.10/site-packages/locust/user/task.py"", line 373, in execute_next_task
+    self.execute_task(self._task_queue.popleft())
+  File ""/home/mwall/Sourcecode/geonode-benchmark/venv/lib/python3.10/site-packages/locust/user/task.py"", line 490, in execute_task
+    task(self.user)
+  File ""/home/mwall/Sourcecode/geonode-benchmark/benchmark/geoserver.py"", line 38, in get_random_featuretype
+    featuretypes = r_featuretypes.json()['featureTypes']['featureType']
+  File ""/home/mwall/Sourcecode/geonode-benchmark/venv/lib/python3.10/site-packages/requests/models.py"", line 978, in json
+    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+",local
+6,Expecting value: line 1 column 1 (char 0),"  File ""/home/mwall/Sourcecode/geonode-benchmark/venv/lib/python3.10/site-packages/locust/user/task.py"", line 340, in run
+    self.execute_next_task()
+  File ""/home/mwall/Sourcecode/geonode-benchmark/venv/lib/python3.10/site-packages/locust/user/task.py"", line 373, in execute_next_task
+    self.execute_task(self._task_queue.popleft())
+  File ""/home/mwall/Sourcecode/geonode-benchmark/venv/lib/python3.10/site-packages/locust/user/task.py"", line 490, in execute_task
+    task(self.user)
+  File ""/home/mwall/Sourcecode/geonode-benchmark/benchmark/geonode.py"", line 155, in upload_dataset
+    exec_id = r.json()[""execution_id""]
+  File ""/home/mwall/Sourcecode/geonode-benchmark/venv/lib/python3.10/site-packages/requests/models.py"", line 978, in json
+    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+",local
+1,Expecting value: line 1 column 1 (char 0),"  File ""/home/mwall/Sourcecode/geonode-benchmark/venv/lib/python3.10/site-packages/locust/user/task.py"", line 340, in run
+    self.execute_next_task()
+  File ""/home/mwall/Sourcecode/geonode-benchmark/venv/lib/python3.10/site-packages/locust/user/task.py"", line 373, in execute_next_task
+    self.execute_task(self._task_queue.popleft())
+  File ""/home/mwall/Sourcecode/geonode-benchmark/venv/lib/python3.10/site-packages/locust/user/task.py"", line 490, in execute_task
+    task(self.user)
+  File ""/home/mwall/Sourcecode/geonode-benchmark/benchmark/geonode.py"", line 90, in get_random_dataset_wms_xml
+    dataset = self.__pick_random_dataset__()
+  File ""/home/mwall/Sourcecode/geonode-benchmark/benchmark/utils.py"", line 49, in __pick_random_dataset__
+    self.all_datasets = self.client.get(""/api/v2/datasets/?page_size=100"", headers=self.headers).json()[""datasets""]
+  File ""/home/mwall/Sourcecode/geonode-benchmark/venv/lib/python3.10/site-packages/requests/models.py"", line 978, in json
+    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+",local
+12,Expecting value: line 1 column 1 (char 0),"  File ""/home/mwall/Sourcecode/geonode-benchmark/venv/lib/python3.10/site-packages/locust/user/task.py"", line 340, in run
+    self.execute_next_task()
+  File ""/home/mwall/Sourcecode/geonode-benchmark/venv/lib/python3.10/site-packages/locust/user/task.py"", line 373, in execute_next_task
+    self.execute_task(self._task_queue.popleft())
+  File ""/home/mwall/Sourcecode/geonode-benchmark/venv/lib/python3.10/site-packages/locust/user/task.py"", line 490, in execute_task
+    task(self.user)
+  File ""/home/mwall/Sourcecode/geonode-benchmark/benchmark/geonode.py"", line 160, in upload_dataset
+    r_exec = self.client.get(f""/api/v2/executionrequest/{exec_id}"", headers=self.headers).json()
+  File ""/home/mwall/Sourcecode/geonode-benchmark/venv/lib/python3.10/site-packages/requests/models.py"", line 978, in json
+    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+",local
+1,Expecting value: line 1 column 1 (char 0),"  File ""/home/mwall/Sourcecode/geonode-benchmark/venv/lib/python3.10/site-packages/locust/user/task.py"", line 340, in run
+    self.execute_next_task()
+  File ""/home/mwall/Sourcecode/geonode-benchmark/venv/lib/python3.10/site-packages/locust/user/task.py"", line 373, in execute_next_task
+    self.execute_task(self._task_queue.popleft())
+  File ""/home/mwall/Sourcecode/geonode-benchmark/venv/lib/python3.10/site-packages/locust/user/task.py"", line 490, in execute_task
+    task(self.user)
+  File ""/home/mwall/Sourcecode/geonode-benchmark/benchmark/pycsw.py"", line 45, in get_metadata_dublin_core
+    dataset=self.__pick_random_dataset__(), name=""Dublin Core""
+  File ""/home/mwall/Sourcecode/geonode-benchmark/benchmark/utils.py"", line 49, in __pick_random_dataset__
+    self.all_datasets = self.client.get(""/api/v2/datasets/?page_size=100"", headers=self.headers).json()[""datasets""]
+  File ""/home/mwall/Sourcecode/geonode-benchmark/venv/lib/python3.10/site-packages/requests/models.py"", line 978, in json
+    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+",local
