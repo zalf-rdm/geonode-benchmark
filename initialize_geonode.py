@@ -236,7 +236,7 @@ def main():
     elif args.upload_datasets_into_geonode:
         upload_datasets_into_geonode()
     elif args.delete_all_datastets:
-        delete_all_datastets()
+        delete_all_datasets()
     else:
         raise SystemExit(f"unexpected command ...")
 

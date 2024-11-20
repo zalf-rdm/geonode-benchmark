@@ -7,5 +7,5 @@ appVersion: "4.3.0"
 
 dependencies:
   - name: geonode-k8s
-    version: 1.2.1
+    version: 1.2.3-alpha
     repository: https://zalf-rdm.github.io/geonode-k8s/

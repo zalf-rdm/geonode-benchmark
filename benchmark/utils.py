@@ -1,19 +1,10 @@
 import random
 import os
 import glob
-import logging
-import sys
-import time
-import re
 
 from locust import HttpUser
-from locust.exception import RescheduleTask
 
-from geonoderest.datasets import GeonodeDatasetsHandler as gnDatasets
 from geonoderest.apiconf import GeonodeApiConf as gnConf
-from geonoderest.executionrequest import (
-    GeonodeExecutionRequestHandler as gnExecutionRequest,
-)
 
 
 class GenodeBenchmarkHttpUser(HttpUser):
@@ -32,6 +23,13 @@ class GenodeBenchmarkHttpUser(HttpUser):
         return {"Authorization": f"Basic {gn_conf.auth_basic}"}
 
     def on_start(self):
+        """
+        Called when the user starts running.
+
+        This is the place to perform any setup that should happen before the user
+        starts running, such as setting up the headers with a random user.
+
+        """
         self.headers = self.__get_random_user_auth_header__()
 
     # TODO write a method that deletes all uploads
@@ -47,9 +45,8 @@ class GenodeBenchmarkHttpUser(HttpUser):
         return (username, password)
 
     def __pick_random_dataset__(self):
-        gn_conf = gnConf.from_env_vars()
         if self.all_datasets is None:
-            self.all_datasets = gnDatasets(env=gn_conf).list(page_size=100)
+            self.all_datasets = self.client.get("/api/v2/datasets/?page_size=100", headers=self.headers).json()["datasets"]
         dataset = random.choice(self.all_datasets)
         return dataset
 
@@ -59,32 +56,3 @@ class GenodeBenchmarkHttpUser(HttpUser):
 
         return dataset_path
 
-    def __wait_and_get_upload_pk__(self, execid: str, gnConf: gnConf) -> int:
-        """
-        Wait for the upload to finish and retrieve the primary key (pk) of the upload.
-
-        Args:
-            execid (str): The ID of the execution.
-
-        Returns:
-            int: The primary key (pk) of the upload.
-
-        Raises:
-            SystemExit: If the upload fails or the pk ID cannot be found.
-        """
-        gn_execreq = gnExecutionRequest(gnConf)
-        r_exec = gn_execreq.get(exec_id=execid, page_size=100)
-        t = 0
-        while r_exec["status"] != "finished" and r_exec["status"] != "failed":
-            r_exec = gn_execreq.get(exec_id=execid, page_size=100)
-            t += 5
-
-        if r_exec["status"] == "failed":
-            raise RescheduleTask("Could not find pk id of upload ...")
-
-        detail_url = r_exec["output_params"]["resources"][0]["detail_url"]
-        match = re.search(r"/(\d+)$", detail_url)
-        if match:
-            return int(match.group(1))
-        else:
-            raise RescheduleTask("Could not find pk id of upload ...")
